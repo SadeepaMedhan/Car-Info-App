@@ -2,6 +2,9 @@ import React from 'react'
 import { Center, Box, Heading, VStack, FormControl, Input, Link, Button, HStack, Text } from "native-base";
 
 export default function Login({ navigation }) {
+
+  const [show, setShow] = React.useState(false);
+
   return (
     <Center w="100%">
       <Box safeArea p="2" py="8" w="90%" maxW="290">
