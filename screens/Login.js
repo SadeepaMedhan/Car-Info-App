@@ -5,6 +5,19 @@ export default function Login({ navigation }) {
 
   const [show, setShow] = React.useState(false);
 
+  const getAll =()=>{
+    fetch('http://192.168.8.102:4000/user')
+    .then(res => {
+      console.log(res);
+    })
+    .then((data) => {
+      console.log(data)
+    },(er)=>{
+      console.log(er);
+    }
+    );
+  }
+
   return (
     <Center w="100%">
       <Box safeArea p="2" py="8" w="90%" maxW="290">

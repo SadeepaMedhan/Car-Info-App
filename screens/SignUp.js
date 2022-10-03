@@ -18,38 +18,39 @@ export default function SignUp({ navigation }) {
     setConfirmPassword("");
   }
 
-
-
-
   const saveUser = async () => {
-    let formData = {
-      name: name,
-      email: email,
-      password: password,
-      phone: phone
-    }
+    if (name !== "") {
+      let formData = {
+        name: name,
+        email: email,
+        password: password,
+        phone: phone
+      }
 
-    let response = await userService.saveUser(formData);
-    if (response.status === 201) {
-      console.log("saved !")
-      this.clearData()
-    } else {
-      console.log(response.data)
-    }
+      const promise = new Promise((resolve, reject) => {
+        fetch('http://192.168.8.102:4000/user', {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+          body: JSON.stringify({ formData })
+        })
+          .then((response) => response.json())
+          .then((responseJson) => console.log(responseJson))
+          .catch((er) => {
+            console.log('error: ' + er);
+            return resolve(er)
+          })
+      })
+      console.log("done");
+      return await promise
 
-    // fetch('http://127.0.0.1:4000/user', {
-    //   method: 'POST',
-    //   headers: {
-    //     Accept: 'application/json',
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({
-    //     name: name,
-    //     email: email,
-    //     password: password,
-    //     phone: phone
-    //   })
-    // })
+    }
+    // form.append(uploadFileName, {
+    //   uri : localImage.full,
+    //   type: 'image/jpeg',
+    //   name: uploadFileName
+    //  })
   }
 
   return (
@@ -73,6 +74,10 @@ export default function SignUp({ navigation }) {
           <FormControl>
             <FormControl.Label>Email</FormControl.Label>
             <Input value={email} onChangeText={(e) => { setEmail(e) }} />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label>Phone</FormControl.Label>
+            <Input value={phone} onChangeText={(e) => { setPhone(e) }} />
           </FormControl>
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
