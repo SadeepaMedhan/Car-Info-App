@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Center, Box, Heading, VStack, FormControl, Input, Button } from "native-base";
+import userService from '../service/userService';
 
 
 export default function SignUp({ navigation }) {
@@ -17,23 +18,38 @@ export default function SignUp({ navigation }) {
     setConfirmPassword("");
   }
 
-  const saveUser = () => {
-    fetch('http://localhost:4000/user', {
-      method: 'POST',
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        password: password,
-        phone: phone
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then((response) => response.json())
-      .then((json) => console.log(json));
-    
-    navigation.navigate("Home");
+
+
+
+  const saveUser = async () => {
+    let formData = {
+      name: name,
+      email: email,
+      password: password,
+      phone: phone
+    }
+
+    let response = await userService.saveUser(formData);
+    if (response.status === 201) {
+      console.log("saved !")
+      this.clearData()
+    } else {
+      console.log(response.data)
+    }
+
+    // fetch('http://127.0.0.1:4000/user', {
+    //   method: 'POST',
+    //   headers: {
+    //     Accept: 'application/json',
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({
+    //     name: name,
+    //     email: email,
+    //     password: password,
+    //     phone: phone
+    //   })
+    // })
   }
 
   return (
