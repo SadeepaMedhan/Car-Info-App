@@ -3,13 +3,13 @@ import { VStack, Box, Divider, FormControl, TextArea, Button, Input, HStack } fr
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-picker';
 
-export default function NewCar() {
+export default function NewCar({navigation}) {
 
   const [brand, setBrand] = useState('');
   const [reg_number, setReg_number] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
-  const [img, setImg] = useState('');
+  const [img, setImg] = useState('img');
 
   const [filePath, setFilePath] = useState({});
  
@@ -73,7 +73,12 @@ export default function NewCar() {
           body: JSON.stringify({ data })
         })
           .then((response) => response.json())
-          .then((responseJson) => console.log(responseJson))
+          .then((responseJson) => {console.log(responseJson)
+          if(responseJson==="Saved!"){
+              setBrand("");
+              
+          }
+          })
           .catch((er) => {
             console.log('error: ' + er);
             return resolve(er)

@@ -3,11 +3,11 @@ import { Button, HStack, Text, VStack } from 'native-base'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-export default function Settings(params) {
+export default function Settings({id,navigation}) {
   const [user, setUser] = useState(null);
   React.useEffect(() => {
-    //console.log(params.id);
-    getUser(params.id);
+    //console.log(id);
+    getUser(id);
   },
     []);
 
@@ -32,7 +32,7 @@ export default function Settings(params) {
         <Text>{user!==null?user.name:"none"}</Text>
         <Text>{user!==null?user.email:"none"}</Text>
         
-      <Button mt="2">View Profile</Button>
+      <Button mt="2"  onPress={() => { navigation.navigate("updateUser", { user: user }) }}>View Profile</Button>
         </VStack>
       </HStack>
       <Button>Connection</Button>

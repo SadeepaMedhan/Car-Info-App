@@ -11,30 +11,34 @@ export default function Login({ navigation }) {
   const [password, setPassword] = useState('');
   useEffect(() => {
     getAll();
-  }, []);
+  },[]);
   const getAll = async () => {
     try {
       const response = await fetch('http://192.168.8.102:4000/user');
       const uList = await response.json();
       setList(uList);
+      setShow(false);
     } catch (error) {
       console.error(error);
     }
   }
-
   const login = () => {
     if (email !== '') {
       if (password !== '') {
         list.map((user) => {
           if (user.email === email) {
+        setShow(false);
             if (user.password === password) {
               setId(user._id);
               //console.log(id);
-              navigation.navigate("Home",{user_id:user._id})
+              setEmail('');
+              setPassword('');
+              navigation.navigate("Home", { user_id: user._id })
             }
           }
         })
-
+        getAll();
+        setShow(true);
       } else {
         setMsg("Invalid Password!")
         setShow(true);

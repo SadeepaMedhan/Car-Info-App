@@ -21,6 +21,18 @@ export default function CarInfo({ navigation, route }) {
     }
   }
 
+  const deleteCar = () => {
+    fetch('http://192.168.8.102:4000/car/' + car._id, {
+      method: 'DELETE',
+    }).then((response) => response.json())
+      .then((json) => {
+        console.log(json)
+        if (json === "Deleted!") {
+          navigation.navigate("View All")
+        }
+      });
+  }
+
   return (
     <VStack bg="coolGray.300" rounded="md" shadow={3} alignItems="center" justifyContent="flex-start" space={4}>
 
@@ -31,8 +43,8 @@ export default function CarInfo({ navigation, route }) {
       <Text fontSize="sm">{car.description}</Text>
 
       <HStack m='5' alignItems="flex-end" justifyContent="flex-end" space={4}>
-        <Button w='100' colorScheme="gray" onPress={() => { navigation.navigate("updateCar",{car:car})}}>Edit</Button>
-        <Button w='100' colorScheme="danger">Remove</Button>
+        <Button w='100' colorScheme="gray" onPress={() => { navigation.navigate("updateCar", { car: car }) }}>Edit</Button>
+        <Button w='100' colorScheme="danger" onPress={deleteCar}>Remove</Button>
       </HStack>
     </VStack>
   )

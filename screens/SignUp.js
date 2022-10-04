@@ -11,13 +11,6 @@ export default function SignUp({ navigation }) {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const clearData = () => {
-    setName("");
-    setEmail("");
-    setPassword("");
-    setConfirmPassword("");
-  }
-
   const saveUser = async () => {
     if (name !== "") {
       let formData = {
@@ -36,13 +29,20 @@ export default function SignUp({ navigation }) {
           body: JSON.stringify({ formData })
         })
           .then((response) => response.json())
-          .then((responseJson) => console.log(responseJson))
+          .then((responseJson) => {console.log(responseJson)
+          if(responseJson==="Saved!"){
+            setName("");
+            setEmail("");
+            setPassword("");
+            setConfirmPassword("");
+            navigation.navigate("Login")
+          }
+          })
           .catch((er) => {
             console.log('error: ' + er);
             return resolve(er)
           })
       })
-      console.log("done");
       return await promise
 
     }
