@@ -31,7 +31,7 @@ export default function CarInfo({ navigation, route }) {
       <Text fontSize="sm">{car.description}</Text>
 
       <HStack m='5' alignItems="flex-end" justifyContent="flex-end" space={4}>
-        <Button w='100' colorScheme="gray" >Edit</Button>
+        <Button w='100' colorScheme="gray" onPress={() => { navigation.navigate("updateCar",{car:car})}}>Edit</Button>
         <Button w='100' colorScheme="danger">Remove</Button>
       </HStack>
     </VStack>

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import NewCar from './NewCar';
 import AllCars from './AllCars';
 import Settings from './Settings';
 import TabBar from '../components/TabBar';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 const Tab = createMaterialBottomTabNavigator();
@@ -23,7 +24,7 @@ export default function Home(route) {
   >
       <Tab.Screen name="New Car" component={NewCar} />
       <Tab.Screen name="View All" component={AllCars} />
-      <Tab.Screen name="Settings">
+      <Tab.Screen name="Settings" >
       {(props) => <Settings id={route.route.params.user_id} {...props} />}
       </Tab.Screen>
     </Tab.Navigator>

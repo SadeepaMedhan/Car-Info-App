@@ -1,21 +1,48 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Center, Box, Heading, VStack, FormControl, Input, Link, Button, HStack, Text, Alert, IconButton, CloseIcon } from "native-base";
 
 export default function Login({ navigation }) {
 
   const [show, setShow] = useState(false);
+  const [msg, setMsg] = useState("Poor internet connection.");
+  const [list, setList] = useState([]);
+  const [id, setId] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  useEffect(() => {
+    getAll();
+  }, []);
+  const getAll = async () => {
+    try {
+      const response = await fetch('http://192.168.8.102:4000/user');
+      const uList = await response.json();
+      setList(uList);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-  const getAll = () => {
-    fetch('http://192.168.8.102:4000/user')
-      .then(res => {
-        console.log(res);
-      })
-      .then((data) => {
-        console.log(data)
-      }, (er) => {
-        console.log(er);
+  const login = () => {
+    if (email !== '') {
+      if (password !== '') {
+        list.map((user) => {
+          if (user.email === email) {
+            if (user.password === password) {
+              setId(user._id);
+              //console.log(id);
+              navigation.navigate("Home",{user_id:user._id})
+            }
+          }
+        })
+
+      } else {
+        setMsg("Invalid Password!")
+        setShow(true);
       }
-      );
+    } else {
+      setMsg("Invalid E-mail address!")
+      setShow(true);
+    }
   }
 
   return (
@@ -35,11 +62,11 @@ export default function Login({ navigation }) {
         <VStack space={3} mt="5">
           <FormControl>
             <FormControl.Label>Email ID</FormControl.Label>
-            <Input />
+            <Input value={email} onChangeText={(e) => { setEmail(e) }} />
           </FormControl>
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
-            <Input type="password"   />
+            <Input type="password" value={password} onChangeText={(e) => { setPassword(e) }} />
             <Link _text={{
               fontSize: "xs",
               fontWeight: "500",
@@ -48,7 +75,7 @@ export default function Login({ navigation }) {
               Forget Password?
             </Link>
           </FormControl>
-          <Button mt="2" colorScheme="indigo" onPress={() => { navigation.navigate("Home",{user_id:"name"}) }}>
+          <Button mt="2" colorScheme="indigo" onPress={login}>
             Sign in
           </Button>
           <HStack mt="6" justifyContent="center">
@@ -74,14 +101,14 @@ export default function Login({ navigation }) {
             <HStack space={2} flexShrink={1}>
               <Alert.Icon mt="1" />
               <Text fontSize="md" color="coolGray.800">
-                "Poor internet connection."
+                {msg}
               </Text>
             </HStack>
             <IconButton variant="unstyled" _focus={{
               borderWidth: 0
             }} icon={<CloseIcon size="3" />} _icon={{
               color: "coolGray.600"
-            }} onPress={() => setShow(false)}  />
+            }} onPress={() => setShow(false)} />
           </HStack>
         </VStack>
       </Alert>
