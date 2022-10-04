@@ -1,21 +1,21 @@
-import React from 'react'
-import { Center, Box, Heading, VStack, FormControl, Input, Link, Button, HStack, Text } from "native-base";
+import React, { useState } from 'react'
+import { Center, Box, Heading, VStack, FormControl, Input, Link, Button, HStack, Text, Alert, IconButton, CloseIcon } from "native-base";
 
 export default function Login({ navigation }) {
 
-  const [show, setShow] = React.useState(false);
+  const [show, setShow] = useState(false);
 
-  const getAll =()=>{
+  const getAll = () => {
     fetch('http://192.168.8.102:4000/user')
-    .then(res => {
-      console.log(res);
-    })
-    .then((data) => {
-      console.log(data)
-    },(er)=>{
-      console.log(er);
-    }
-    );
+      .then(res => {
+        console.log(res);
+      })
+      .then((data) => {
+        console.log(data)
+      }, (er) => {
+        console.log(er);
+      }
+      );
   }
 
   return (
@@ -39,16 +39,16 @@ export default function Login({ navigation }) {
           </FormControl>
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
-            <Input type="password" />
+            <Input type="password"   />
             <Link _text={{
               fontSize: "xs",
               fontWeight: "500",
               color: "indigo.500"
-            }} alignSelf="flex-end" mt="1">
+            }} alignSelf="flex-end" mt="1" onPress={() => setShow(true)}>
               Forget Password?
             </Link>
           </FormControl>
-          <Button mt="2" colorScheme="indigo"  onPress={()=>{navigation.navigate("Home")}}>
+          <Button mt="2" colorScheme="indigo" onPress={() => { navigation.navigate("Home") }}>
             Sign in
           </Button>
           <HStack mt="6" justifyContent="center">
@@ -61,12 +61,31 @@ export default function Login({ navigation }) {
               color: "indigo.500",
               fontWeight: "medium",
               fontSize: "sm"
-            }} onPress={()=>{navigation.navigate("SignUp")}}>
+            }} onPress={() => { navigation.navigate("SignUp") }}>
               Sign Up
             </Link>
           </HStack>
         </VStack>
       </Box>
+
+      {show && <Alert w="100%" status="warning">
+        <VStack space={2} flexShrink={1} w="100%">
+          <HStack flexShrink={1} space={2} justifyContent="space-between">
+            <HStack space={2} flexShrink={1}>
+              <Alert.Icon mt="1" />
+              <Text fontSize="md" color="coolGray.800">
+                "Poor internet connection."
+              </Text>
+            </HStack>
+            <IconButton variant="unstyled" _focus={{
+              borderWidth: 0
+            }} icon={<CloseIcon size="3" />} _icon={{
+              color: "coolGray.600"
+            }} onPress={() => setShow(false)}  />
+          </HStack>
+        </VStack>
+      </Alert>
+      }
     </Center>
   )
 }
