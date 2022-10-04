@@ -18,7 +18,6 @@ export default function NewCar() {
       description: description,
       img: img
     }
-      
         const promise = new Promise((resolve, reject) => {
         fetch('http://192.168.8.102:4000/car', {
           method: 'POST',
@@ -35,7 +34,6 @@ export default function NewCar() {
           })
       })
       return await promise
-
     }
   }
 
