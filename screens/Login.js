@@ -48,7 +48,7 @@ export default function Login({ navigation }) {
               Forget Password?
             </Link>
           </FormControl>
-          <Button mt="2" colorScheme="indigo" onPress={() => { navigation.navigate("Home") }}>
+          <Button mt="2" colorScheme="indigo" onPress={() => { navigation.navigate("Home",{user_id:"name"}) }}>
             Sign in
           </Button>
           <HStack mt="6" justifyContent="center">

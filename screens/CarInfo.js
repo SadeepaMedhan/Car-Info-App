@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { HStack, Image, Text, VStack } from 'native-base';
+import { Button, HStack, Image, Text, VStack } from 'native-base';
 
 export default function CarInfo({ navigation, route }) {
   const [car, setCar] = useState('');
@@ -26,9 +26,14 @@ export default function CarInfo({ navigation, route }) {
 
       <Text fontSize="2xl">{car.brand}</Text>
       <Image source={require('../assets/car1.png')} alt="img" h="100" w="80%" />
-      <Text fontSize="sm">{car.price}LKR</Text>
+      <Text fontSize="sm">Price : {car.price}LKR</Text>
+      <Text fontSize="sm">{car.description}</Text>
       <Text fontSize="sm">{car.description}</Text>
 
+      <HStack m='5' alignItems="flex-end" justifyContent="flex-end" space={4}>
+        <Button w='100' colorScheme="gray" >Edit</Button>
+        <Button w='100' colorScheme="danger">Remove</Button>
+      </HStack>
     </VStack>
   )
 }
