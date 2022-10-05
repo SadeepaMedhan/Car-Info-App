@@ -38,7 +38,7 @@ export default function AllCars({ user_id, navigation }) {
         <FlatList 
         data={data}
         renderItem={(car) =>
-          <TouchableOpacity onPress={() => { navigation.navigate("CarInfo", { car_id: car.item._id }) }} style={{margin:10}}>
+          <TouchableOpacity onPress={() => { navigation.navigate("CarInfo", { car_id: car.item._id, userId: user_id  }) }} style={{margin:10}}>
             <Card car_info={car.item}/>
           </TouchableOpacity>
         } /> :
