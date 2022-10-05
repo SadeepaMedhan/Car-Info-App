@@ -3,7 +3,7 @@ import { VStack, Box, Divider, FormControl, TextArea, Button, Input, HStack } fr
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-picker';
 
-export default function NewCar({navigation}) {
+export default function NewCar({ navigation }) {
 
   const [brand, setBrand] = useState('');
   const [reg_number, setReg_number] = useState('');
@@ -12,7 +12,7 @@ export default function NewCar({navigation}) {
   const [img, setImg] = useState('img');
 
   const [filePath, setFilePath] = useState({});
- 
+
   const chooseFile = () => {
     let options = {
       title: 'Select Image',
@@ -27,10 +27,10 @@ export default function NewCar({navigation}) {
         path: 'images',
       },
     };
-    
-    ImagePicker.showImagePicker(options, (response) => {
+
+    launchImageLibrary(options, (response) => {
       console.log('Response = ', response);
- 
+
       if (response.didCancel) {
         console.log('User cancelled image picker');
       } else if (response.error) {
@@ -55,7 +55,7 @@ export default function NewCar({navigation}) {
 
 
   const saveCar = async () => {
-    
+
     if (brand !== "") {
       let data = {
         brand: brand,
@@ -73,11 +73,12 @@ export default function NewCar({navigation}) {
           body: JSON.stringify({ data })
         })
           .then((response) => response.json())
-          .then((responseJson) => {console.log(responseJson)
-          if(responseJson==="Saved!"){
+          .then((responseJson) => {
+            console.log(responseJson)
+            if (responseJson === "Saved!") {
               setBrand("");
-              
-          }
+              navigation.navigate("View All")
+            }
           })
           .catch((er) => {
             console.log('error: ' + er);
@@ -117,7 +118,7 @@ export default function NewCar({navigation}) {
           </FormControl>
           <FormControl>
             <FormControl.Label>Images</FormControl.Label>
-            
+
             <Button onPress={chooseFile} >Camara</Button>
 
           </FormControl>

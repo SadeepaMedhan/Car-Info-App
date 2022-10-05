@@ -10,7 +10,7 @@ export default function AllCars({ navigation }) {
 
   useEffect(() => {
     getAllCars();
-  }, []);
+  }, [navigation]);
 
   const getAllCars = async () => {
     try {
@@ -18,7 +18,7 @@ export default function AllCars({ navigation }) {
       const carList = await response.json();
       setData(carList);
       setLoading(true);
-      //console.log(carList);
+      console.log(carList);
     } catch (error) {
       setLoading(false);
       console.error(error);
