@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { Center, Box, Heading, VStack, FormControl, Input, Button, HStack } from "native-base";
+import Connection from '../Connection';
 
 export default function UpdateUser({ route, navigation }) {
     React.useEffect(() => {
         setData(route.params.user);
     }, []);
+    const url = Connection().url;
     const [id, setId] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -30,7 +32,7 @@ export default function UpdateUser({ route, navigation }) {
             }
 
             const promise = new Promise((resolve, reject) => {
-                fetch('http://192.168.8.102:4000/user/' + id, {
+                fetch(url+'user/' + id, {
                     method: 'PUT',
                     headers: {
                         'Content-type': 'application/json; charset=UTF-8',
@@ -53,7 +55,7 @@ export default function UpdateUser({ route, navigation }) {
         }
     }
     const deleteUser = () => {
-        fetch('http://192.168.8.102:4000/user/' + id, {
+        fetch(url+'user/' + id, {
             method: 'DELETE',
         }).then((response) => response.json())
             .then((json) => {

@@ -1,58 +1,48 @@
 import React, { useState } from 'react';
-import { VStack, Box, Divider, FormControl, TextArea, Button, Input, HStack } from 'native-base';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { VStack, Box, Divider, FormControl, TextArea, Button, Input, HStack, Text } from 'native-base';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import ImagePicker from 'react-native-image-picker';
+import Connection from '../Connection';
+import { Alert, Image } from 'react-native';
+
 
 export default function NewCar({ navigation }) {
-
+  const url = Connection().url;
   const [brand, setBrand] = useState('');
   const [reg_number, setReg_number] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
   const [img, setImg] = useState('img');
+  const [imageSource, setImageSource] = useState(null);
 
-  const [filePath, setFilePath] = useState({});
-
-  const chooseFile = () => {
+  function selectImage() {
     let options = {
-      title: 'Select Image',
-      customButtons: [
-        {
-          name: 'customOptionKey',
-          title: 'Choose Photo from Custom Option'
-        },
-      ],
+      title: 'You can choose one image',
+      maxWidth: 256,
+      maxHeight: 256,
+      noData: true,
+      mediaType: 'photo',
       storageOptions: {
-        skipBackup: true,
-        path: 'images',
-      },
+        skipBackup: true
+      }
     };
 
-    launchImageLibrary(options, (response) => {
-      console.log('Response = ', response);
-
+    launchImageLibrary(options, response => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
+        console.log('User cancelled photo picker');
+        Alert.alert('You did not select any image');
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
-        console.log(
-          'User tapped custom button: ',
-          response.customButton
-        );
-        alert(response.customButton);
+        console.log('User tapped custom button: ', response.customButton);
       } else {
-        //let source = response;
-        //You can also display the image using data:
-        let source = {
-          uri: 'data:image/jpeg;base64,' + response.data
-        };
-        setFilePath(source);
+        //console.log(response);
+        let source = { uri: response.assets[0].uri };
+
+        setImageSource(source.uri);
       }
     });
-  };
-
-
+  }
 
   const saveCar = async () => {
 
@@ -62,10 +52,10 @@ export default function NewCar({ navigation }) {
         reg_number: reg_number,
         price: price,
         description: description,
-        img: img
+        img: imageSource
       }
       const promise = new Promise((resolve, reject) => {
-        fetch('http://192.168.8.102:4000/car', {
+        fetch(url + 'car', {
           method: 'POST',
           headers: {
             'Content-type': 'application/json; charset=UTF-8',
@@ -93,43 +83,39 @@ export default function NewCar({ navigation }) {
 
 
   return (
-    <Box border="1" borderRadius="md">
-      <VStack space="4" divider={<Divider />}>
-        <Box px="4" pt="4">
-          Add New Car
-        </Box>
+    
+      <VStack m="3" alignItems="center" justifyContent="center" space="3" >
+        <Text mt="2" fontSize="2xl">Add New Car</Text>
+        <FormControl>
+          <FormControl.Label>Brand</FormControl.Label>
+          <Input borderRadius="30" value={brand} onChangeText={(e) => { setBrand(e) }} />
+        </FormControl>
+        <FormControl>
+          <FormControl.Label>Reg. No</FormControl.Label>
+          <Input borderRadius="30" value={reg_number} onChangeText={(e) => { setReg_number(e) }} />
+        </FormControl>
+        <FormControl>
+          <FormControl.Label>price</FormControl.Label>
+          <Input borderRadius="30" value={price} onChangeText={(e) => { setPrice(e) }} />
+        </FormControl>
+        <FormControl>
+          <FormControl.Label>Description</FormControl.Label>
+          <Input borderRadius="30" value={description} onChangeText={(e) => { setDescription(e) }} />
+        </FormControl>
+        <HStack alignItems="flex-start" space="3">
 
-        <VStack space={4} px="4">
-          <FormControl>
-            <FormControl.Label>Brand</FormControl.Label>
-            <Input value={brand} onChangeText={(e) => { setBrand(e) }} />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Reg. No</FormControl.Label>
-            <Input value={reg_number} onChangeText={(e) => { setReg_number(e) }} />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>price</FormControl.Label>
-            <Input value={price} onChangeText={(e) => { setPrice(e) }} />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Description</FormControl.Label>
-            <Input value={description} onChangeText={(e) => { setDescription(e) }} />
-          </FormControl>
-          <FormControl>
-            <FormControl.Label>Images</FormControl.Label>
+          <Button onPress={selectImage} >Pick Image</Button>
+          {imageSource !== null &&
+            <Image
+            source={{ uri: imageSource }}
+            style={{ width: 100, height: 100,}}
+            resizeMode='contain'
+            />
+          }
+        </HStack>
+          <Button mt="2" w="90%" borderRadius="30" colorScheme="indigo" onPress={saveCar}> Save</Button>
 
-            <Button onPress={chooseFile} >Camara</Button>
-
-          </FormControl>
-        </VStack>
-
-        <Box px="4" pb="4">
-          <Button mt="2" colorScheme="indigo" onPress={saveCar} >
-            Save
-          </Button>
-        </Box>
       </VStack>
-    </Box>
+ 
   )
 }

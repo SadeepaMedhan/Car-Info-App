@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Text, VStack } from 'native-base'
 import Card from '../components/Card'
 import { FlatList, TouchableOpacity } from 'react-native'
+import Connection from '../Connection'
 
 
 export default function AllCars({ navigation }) {
@@ -14,11 +15,11 @@ export default function AllCars({ navigation }) {
 
   const getAllCars = async () => {
     try {
-      const response = await fetch('http://192.168.8.102:4000/car');
+      const response = await fetch(Connection().url+'car');
       const carList = await response.json();
       setData(carList);
       setLoading(true);
-      console.log(carList);
+      console.log("load carList");
     } catch (error) {
       setLoading(false);
       console.error(error);

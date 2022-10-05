@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
 import { Button, HStack, Image, Text, VStack } from 'native-base';
+import Connection from '../Connection';
+
 
 export default function CarInfo({ navigation, route }) {
   const [car, setCar] = useState('');
+  const url = Connection().url;
+
   React.useEffect(() => {
     if (route.params?.car_id) {
       getCar(route.params?.car_id)
@@ -12,7 +16,7 @@ export default function CarInfo({ navigation, route }) {
 
   const getCar = async (id) => {
     try {
-      const response = await fetch('http://192.168.8.102:4000/car/' + id);
+      const response = await fetch(url+'car/' + id);
       const vehicle = await response.json();
       setCar(vehicle);
       //console.log(vehicle);
@@ -22,7 +26,7 @@ export default function CarInfo({ navigation, route }) {
   }
 
   const deleteCar = () => {
-    fetch('http://192.168.8.102:4000/car/' + car._id, {
+    fetch(url+'car/' + car._id, {
       method: 'DELETE',
     }).then((response) => response.json())
       .then((json) => {
@@ -40,8 +44,8 @@ export default function CarInfo({ navigation, route }) {
       <Image source={require('../assets/car1.png')} alt="img" h="100" w="80%" />
       <Text fontSize="sm">Price : {car.price}LKR</Text>
       <Text fontSize="sm">{car.description}</Text>
-      <Text fontSize="sm">{car.description}</Text>
-
+      <Text fontSize="sm">{car.img}</Text>
+      
       <HStack m='5' alignItems="flex-end" justifyContent="flex-end" space={4}>
         <Button w='100' colorScheme="gray" onPress={() => { navigation.navigate("updateCar", { car: car }) }}>Edit</Button>
         <Button w='100' colorScheme="danger" onPress={deleteCar}>Remove</Button>

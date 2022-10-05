@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Center, Box, Heading, VStack, FormControl, Input, Link, Button, HStack, Text, Alert, IconButton, CloseIcon } from "native-base";
+import { Center, Box, Heading, VStack, FormControl, Input, Link, Button, HStack, Text, IconButton, CloseIcon } from "native-base";
+import Connection from '../Connection';
+import { Alert } from 'react-native';
 
 export default function Login({ navigation }) {
 
@@ -14,7 +16,7 @@ export default function Login({ navigation }) {
   },[]);
   const getAll = async () => {
     try {
-      const response = await fetch('http://192.168.8.102:4000/user');
+      const response = await fetch(Connection().url+'user');
       const uList = await response.json();
       setList(uList);
       setShow(false);
@@ -66,20 +68,20 @@ export default function Login({ navigation }) {
         <VStack space={3} mt="5">
           <FormControl>
             <FormControl.Label>Email ID</FormControl.Label>
-            <Input value={email} onChangeText={(e) => { setEmail(e) }} />
+            <Input borderRadius="30" value={email} onChangeText={(e) => { setEmail(e) }} />
           </FormControl>
           <FormControl>
             <FormControl.Label>Password</FormControl.Label>
-            <Input type="password" value={password} onChangeText={(e) => { setPassword(e) }} />
+            <Input borderRadius="30" type="password" value={password} onChangeText={(e) => { setPassword(e) }} />
             <Link _text={{
               fontSize: "xs",
               fontWeight: "500",
               color: "indigo.500"
-            }} alignSelf="flex-end" mt="1" onPress={() => setShow(true)}>
+            }} alignSelf="flex-end" mt="1" onPress={() =>  Alert.alert('Sorry! This feature not available')}>
               Forget Password?
             </Link>
           </FormControl>
-          <Button mt="2" colorScheme="indigo" onPress={login}>
+          <Button borderRadius="30" mt="2" colorScheme="indigo" onPress={login}>
             Sign in
           </Button>
           <HStack mt="6" justifyContent="center">

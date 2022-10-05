@@ -1,13 +1,15 @@
 import { View, Text } from 'react-native'
 import React, { useState } from 'react'
 import { Box, Button, Divider, FormControl, Input, VStack } from 'native-base';
+import Connection from '../Connection';
+
 
 export default function UpdateCar({route,navigation}) {
     React.useEffect(() => {
         //console.log(route.params);
         setDetails(route.params.car)
     },[]);
-    
+    const url = Connection().url;    
     const [id, setId] = useState('');
     const [brand, setBrand] = useState('');
     const [reg_number, setReg_number] = useState('');
@@ -35,7 +37,7 @@ export default function UpdateCar({route,navigation}) {
           img: img
         }
         const promise = new Promise((resolve, reject) => {
-          fetch('http://192.168.8.102:4000/car/'+id, {
+          fetch(url+'car/'+id, {
             method: 'PUT',
             headers: {
               'Content-type': 'application/json; charset=UTF-8',

@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { Button, HStack, Text, VStack } from 'native-base'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Connection from '../Connection';
 
 export default function Settings({id,navigation}) {
+  const url = Connection().url;
   const [user, setUser] = useState(null);
   React.useEffect(() => {
     //console.log(id);
@@ -13,7 +15,7 @@ export default function Settings({id,navigation}) {
 
   const getUser = async (id) => {
     try {
-      const response = await fetch('http://192.168.8.102:4000/user/' + id);
+      const response = await fetch(url+'user/' + id);
       const u = await response.json();
       setUser(u);
       //console.log(u);
