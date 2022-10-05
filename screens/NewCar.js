@@ -12,7 +12,6 @@ export default function NewCar({user_id, navigation }) {
   const [reg_number, setReg_number] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
-  const [img, setImg] = useState('img');
   const [imageSource, setImageSource] = useState(null);
   const [userId, setUserId] = useState(user_id);
 

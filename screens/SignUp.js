@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Center, Box, Heading, VStack, FormControl, Input, Button } from "native-base";
-import userService from '../service/userService';
 import Connection from '../Connection';
 
 export default function SignUp({ navigation }) {
