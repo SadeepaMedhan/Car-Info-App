@@ -1,27 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import { Text, VStack } from 'native-base'
+import { isEmptyObj, Text, VStack } from 'native-base'
 import Card from '../components/Card'
 import { FlatList, TouchableOpacity } from 'react-native'
 import Connection from '../Connection'
 
 
-export default function AllCars({ navigation }) {
-  const [isLoading, setLoading] = useState(false);
+export default function AllCars({ user_id, navigation }) {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    getAllCars();
+    getAllCars(user_id);
   }, [navigation]);
 
-  const getAllCars = async () => {
+  const getAllCars = async (id) => {
     try {
-      const response = await fetch(Connection().url+'car');
+      const response = await fetch(Connection().url+'car',{
+        method: 'POST',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+          body: JSON.stringify({type : "user", userId : id})
+      });
       const carList = await response.json();
       setData(carList);
-      setLoading(true);
+      console.log(carList);
+      
       console.log("load carList");
     } catch (error) {
-      setLoading(false);
       console.error(error);
     } 
   }
@@ -29,7 +34,7 @@ export default function AllCars({ navigation }) {
   return (
     <VStack alignItems="center" space={3}>
 
-      {isLoading === true ?
+      {data[0] !== undefined ?
         <FlatList 
         data={data}
         renderItem={(car) =>
@@ -37,7 +42,9 @@ export default function AllCars({ navigation }) {
             <Card car_info={car.item}/>
           </TouchableOpacity>
         } /> :
-         <Text>Not found</Text>
+        <VStack h="100%" justifyContent="center">
+         <Text fontSize="xl">Not found</Text>
+        </VStack>
          }
 
     </VStack >

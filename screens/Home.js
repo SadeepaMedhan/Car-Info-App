@@ -22,8 +22,12 @@ export default function Home(route) {
     inactiveColor="#696969"
     barStyle={{ backgroundColor: '#CDCDCD' }}
   >
-      <Tab.Screen name="New Car" component={NewCar} />
-      <Tab.Screen name="View All" component={AllCars} />
+      <Tab.Screen name="New Car" >
+        {(props) => <NewCar user_id={route.route.params.user_id} {...props}/>}
+      </Tab.Screen>
+      <Tab.Screen name="View All" >
+        {(props) => <AllCars user_id={route.route.params.user_id} {...props}/>}
+      </Tab.Screen>
       <Tab.Screen name="Settings" >
       {(props) => <Settings id={route.route.params.user_id} {...props} />}
       </Tab.Screen>

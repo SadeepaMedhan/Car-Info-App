@@ -26,7 +26,7 @@ useEffect(()=>{
         <Stack.Navigator>
           <Stack.Screen name="Login" component={Login} options={{ title: '' }}/>
           <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="Home" component={Home} options={{ title: '' }}/>
+          <Stack.Screen name="Home" component={Home}/>
           <Stack.Screen name="CarInfo" component={CarInfo} options={{ title: 'Overview' }}/>
           <Stack.Screen name="updateCar" component={UpdateCar} options={{ title: 'Update Details' }}/>
           <Stack.Screen name="updateUser" component={UpdateUser} options={{ title: 'User Details' }}/>

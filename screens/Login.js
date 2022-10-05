@@ -4,9 +4,7 @@ import Connection from '../Connection';
 import { Alert } from 'react-native';
 
 export default function Login({ navigation }) {
-
-  const [show, setShow] = useState(false);
-  const [msg, setMsg] = useState("Poor internet connection.");
+  
   const [list, setList] = useState([]);
   const [id, setId] = useState('');
   const [email, setEmail] = useState('');
@@ -19,7 +17,6 @@ export default function Login({ navigation }) {
       const response = await fetch(Connection().url+'user');
       const uList = await response.json();
       setList(uList);
-      setShow(false);
     } catch (error) {
       console.error(error);
     }
@@ -29,7 +26,6 @@ export default function Login({ navigation }) {
       if (password !== '') {
         list.map((user) => {
           if (user.email === email) {
-        setShow(false);
             if (user.password === password) {
               setId(user._id);
               //console.log(id);
@@ -40,14 +36,11 @@ export default function Login({ navigation }) {
           }
         })
         getAll();
-        setShow(true);
       } else {
-        setMsg("Invalid Password!")
-        setShow(true);
+        Alert.alert("Invalid Password!")
       }
     } else {
-      setMsg("Invalid E-mail address!")
-      setShow(true);
+      Alert.alert("Invalid E-mail address!")
     }
   }
 
@@ -77,7 +70,7 @@ export default function Login({ navigation }) {
               fontSize: "xs",
               fontWeight: "500",
               color: "indigo.500"
-            }} alignSelf="flex-end" mt="1" onPress={() =>  Alert.alert('Sorry! This feature not available')}>
+            }} alignSelf="flex-end" mt="1" onPress={() =>  Alert.alert('Sorry! This feature is not available')}>
               Forget Password?
             </Link>
           </FormControl>
@@ -100,25 +93,6 @@ export default function Login({ navigation }) {
           </HStack>
         </VStack>
       </Box>
-
-      {show && <Alert w="100%" status="warning">
-        <VStack space={2} flexShrink={1} w="100%">
-          <HStack flexShrink={1} space={2} justifyContent="space-between">
-            <HStack space={2} flexShrink={1}>
-              <Alert.Icon mt="1" />
-              <Text fontSize="md" color="coolGray.800">
-                {msg}
-              </Text>
-            </HStack>
-            <IconButton variant="unstyled" _focus={{
-              borderWidth: 0
-            }} icon={<CloseIcon size="3" />} _icon={{
-              color: "coolGray.600"
-            }} onPress={() => setShow(false)} />
-          </HStack>
-        </VStack>
-      </Alert>
-      }
     </Center>
   )
 }

@@ -69,19 +69,19 @@ export default function UpdateCar({route,navigation}) {
           <VStack space={4} px="4">
             <FormControl>
               <FormControl.Label>Brand</FormControl.Label>
-              <Input value={brand} onChangeText={(e) => { setBrand(e) }} />
+              <Input borderRadius="30" value={brand} onChangeText={(e) => { setBrand(e) }} />
             </FormControl>
             <FormControl>
               <FormControl.Label>Reg. No</FormControl.Label>
-              <Input value={reg_number} onChangeText={(e) => { setReg_number(e) }} />
+              <Input borderRadius="30" value={reg_number} onChangeText={(e) => { setReg_number(e) }} />
             </FormControl>
             <FormControl>
               <FormControl.Label>price</FormControl.Label>
-              <Input value={price} onChangeText={(e) => { setPrice(e) }} />
+              <Input borderRadius="30" value={price} onChangeText={(e) => { setPrice(e) }} />
             </FormControl>
             <FormControl>
               <FormControl.Label>Description</FormControl.Label>
-              <Input value={description} onChangeText={(e) => { setDescription(e) }} />
+              <Input borderRadius="30" value={description} onChangeText={(e) => { setDescription(e) }} />
             </FormControl>
             <FormControl>
               <FormControl.Label>Images</FormControl.Label>

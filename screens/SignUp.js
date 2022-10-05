@@ -3,7 +3,6 @@ import { Center, Box, Heading, VStack, FormControl, Input, Button } from "native
 import userService from '../service/userService';
 import Connection from '../Connection';
 
-
 export default function SignUp({ navigation }) {
   const url = Connection().url;
   const [name, setName] = useState('');
@@ -22,7 +21,7 @@ export default function SignUp({ navigation }) {
       }
 
       const promise = new Promise((resolve, reject) => {
-        fetch(url+'user', {
+        fetch(url + 'user', {
           method: 'POST',
           headers: {
             'Content-type': 'application/json; charset=UTF-8',
@@ -30,14 +29,15 @@ export default function SignUp({ navigation }) {
           body: JSON.stringify({ formData })
         })
           .then((response) => response.json())
-          .then((responseJson) => {console.log(responseJson)
-          if(responseJson==="Saved!"){
-            setName("");
-            setEmail("");
-            setPassword("");
-            setConfirmPassword("");
-            navigation.navigate("Login")
-          }
+          .then((responseJson) => {
+            console.log(responseJson)
+            if (responseJson === "Saved!") {
+              setName("");
+              setEmail("");
+              setPassword("");
+              setConfirmPassword("");
+              navigation.navigate("Login")
+            }
           })
           .catch((er) => {
             console.log('error: ' + er);
@@ -45,13 +45,7 @@ export default function SignUp({ navigation }) {
           })
       })
       return await promise
-
     }
-    // form.append(uploadFileName, {
-    //   uri : localImage.full,
-    //   type: 'image/jpeg',
-    //   name: uploadFileName
-    //  })
   }
 
   return (

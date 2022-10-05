@@ -6,7 +6,7 @@ import Connection from '../Connection';
 import { Alert, Image } from 'react-native';
 
 
-export default function NewCar({ navigation }) {
+export default function NewCar({user_id, navigation }) {
   const url = Connection().url;
   const [brand, setBrand] = useState('');
   const [reg_number, setReg_number] = useState('');
@@ -14,6 +14,7 @@ export default function NewCar({ navigation }) {
   const [description, setDescription] = useState('');
   const [img, setImg] = useState('img');
   const [imageSource, setImageSource] = useState(null);
+  const [userId, setUserId] = useState(user_id);
 
   function selectImage() {
     let options = {
@@ -52,7 +53,8 @@ export default function NewCar({ navigation }) {
         reg_number: reg_number,
         price: price,
         description: description,
-        img: imageSource
+        img: imageSource,
+        user_id: userId
       }
       const promise = new Promise((resolve, reject) => {
         fetch(url + 'car', {
@@ -60,7 +62,7 @@ export default function NewCar({ navigation }) {
           headers: {
             'Content-type': 'application/json; charset=UTF-8',
           },
-          body: JSON.stringify({ data })
+          body: JSON.stringify({type : "save", data })
         })
           .then((response) => response.json())
           .then((responseJson) => {

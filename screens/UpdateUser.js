@@ -71,23 +71,23 @@ export default function UpdateUser({ route, navigation }) {
                 <VStack space={3} mt="5">
                     <FormControl>
                         <FormControl.Label>Name</FormControl.Label>
-                        <Input value={name} onChangeText={(e) => { setName(e) }} />
+                        <Input borderRadius="30" value={name} onChangeText={(e) => { setName(e) }} />
                     </FormControl>
                     <FormControl>
                         <FormControl.Label>Email</FormControl.Label>
-                        <Input value={email} onChangeText={(e) => { setEmail(e) }} />
+                        <Input borderRadius="30" value={email} onChangeText={(e) => { setEmail(e) }} />
                     </FormControl>
                     <FormControl>
                         <FormControl.Label>Phone</FormControl.Label>
-                        <Input value={phone} onChangeText={(e) => { setPhone(e) }} />
+                        <Input borderRadius="30" value={phone} onChangeText={(e) => { setPhone(e) }} />
                     </FormControl>
                     <FormControl>
                         <FormControl.Label>Password</FormControl.Label>
-                        <Input type="password" value={password} onChangeText={(e) => { setPassword(e) }} />
+                        <Input borderRadius="30" type="password" value={password} onChangeText={(e) => { setPassword(e) }} />
                     </FormControl>
                     <FormControl>
                         <FormControl.Label>Confirm Password</FormControl.Label>
-                        <Input type="password" value={confirmPassword} onChangeText={(e) => { setConfirmPassword(e) }} />
+                        <Input borderRadius="30" type="password" value={confirmPassword} onChangeText={(e) => { setConfirmPassword(e) }} />
                     </FormControl>
                     <HStack mt='2' justifyContent="flex-end" space={4}>
                         <Button w='100' colorScheme="danger" onPress={deleteUser}>Remove</Button>
