@@ -1,48 +1,86 @@
 import React, { useEffect, useState } from 'react'
-import { Center, Box, Heading, VStack, FormControl, Input, Link, Button, HStack, Text, IconButton, CloseIcon } from "native-base";
+import { Center, Box, Heading, VStack, FormControl, Link, Button, HStack, Text, CloseIcon } from "native-base";
 import Connection from '../Connection';
-import { Alert } from 'react-native';
+import { Alert, Keyboard } from 'react-native';
+import Input from '../components/Input';
 
 export default function Login({ navigation }) {
-  
+
   const [list, setList] = useState([]);
+  const [user, setUser] = React.useState(null);
+  const [errors, setErrors] = React.useState({});
   const [id, setId] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+
+  const [inputs, setInputs] = React.useState({
+    email: '',
+    password: ''
+  });
+
   useEffect(() => {
     getAll();
-  },[]);
+  }, []);
+  
   const getAll = async () => {
     try {
-      const response = await fetch(Connection().url+'user');
+      const response = await fetch(Connection().url + 'user');
       const uList = await response.json();
       setList(uList);
     } catch (error) {
       console.error(error);
     }
   }
-  const login = () => {
-    if (email !== '') {
-      if (password !== '') {
-        list.map((user) => {
-          if (user.email === email) {
-            if (user.password === password) {
-              setId(user._id);
-              //console.log(id);
-              setEmail('');
-              setPassword('');
-              navigation.navigate("Home", { user_id: user._id })
-            }
-          }
-        })
-        getAll();
-      } else {
-        Alert.alert("Invalid Password!")
-      }
+
+
+  const validate = () => {
+    Keyboard.dismiss();
+    let valid = false;
+    let selectUser = null;
+    if (!inputs.email) {
+      handleError('Please input email', 'email')
+      valid = false;
     } else {
-      Alert.alert("Invalid E-mail address!")
+      
+      list.map((u) => {
+        if (u.email === inputs.email) {
+          setUser(u);
+          selectUser = u;
+        }
+      })
+      if (selectUser === null) {
+        handleError('Invalid email', 'email')
+        valid = false;
+      } else {
+        if (!inputs.password) {
+          handleError('Please input password', 'password')
+          valid = false;
+        } else if (selectUser.password === inputs.password) {
+          setId(selectUser._id);
+          navigation.navigate("Home", { user_id: selectUser._id })
+          valid = true;
+        } else {
+          handleError('Invalid password', 'password')
+          valid = false;
+        }
+      }
+
     }
+
+    return valid;
+  };
+
+
+  const handleOnChange = (text, input) => {
+    setInputs(prevState => ({ ...prevState, [input]: text }));
   }
+  const handleError = (errorMessage, input) => {
+    setErrors(prevState => ({ ...prevState, [input]: errorMessage }));
+  }
+
+  
+
+  const onSubmit = () => {
+    validate() ? console.log('done') : console.log('Validation Failed');
+  };
 
   return (
     <Center w="100%">
@@ -59,22 +97,48 @@ export default function Login({ navigation }) {
         </Heading>
 
         <VStack space={3} mt="5">
-          <FormControl>
-            <FormControl.Label>Email ID</FormControl.Label>
-            <Input borderRadius="30" value={email} onChangeText={(e) => { setEmail(e) }} />
+          {/* <FormControl isRequired isInvalid={'email' in errors}>
+            <FormControl.Label _text={{ bold: true }}>Email</FormControl.Label>
+            <Input borderRadius="30" placeholder="john@email.com"
+              onChangeText={value => setData({ ...formData, email: value })}
+            />
+            {'email' in errors && <FormControl.ErrorMessage>{errors.email}</FormControl.ErrorMessage>}
           </FormControl>
-          <FormControl>
-            <FormControl.Label>Password</FormControl.Label>
-            <Input borderRadius="30" type="password" value={password} onChangeText={(e) => { setPassword(e) }} />
-            <Link _text={{
+
+          <FormControl isRequired isInvalid={'password' in errors}>
+            <FormControl.Label _text={{ bold: true }}>Password</FormControl.Label>
+            <Input type="password" borderRadius="30" placeholder="******"
+              onChangeText={value => setData({ ...formData, password: value })}
+            />
+            {'password' in errors && <FormControl.ErrorMessage>{errors.password}</FormControl.ErrorMessage>} */}
+
+
+          {/* <Link _text={{
               fontSize: "xs",
               fontWeight: "500",
               color: "indigo.500"
-            }} alignSelf="flex-end" mt="1" onPress={() =>  Alert.alert('Sorry! This feature is not available')}>
+            }} alignSelf="flex-end" mt="1" onPress={() => Alert.alert('Sorry! This feature is not available')}>
               Forget Password?
             </Link>
-          </FormControl>
-          <Button borderRadius="30" mt="2" colorScheme="indigo" onPress={login}>
+          </FormControl> */}
+          <Input label="Email" iconName="email-outline"
+            placeholder="Enter your email address"
+            onChangeText={text => handleOnChange(text, 'email')}
+            error={errors.email}
+            onFocus={() => {
+              handleError(null, 'email')
+            }}
+          />
+          <Input password label="Password" iconName="lock-outline"
+            placeholder="Enter your password"
+            onChangeText={text => handleOnChange(text, 'password')}
+            error={errors.password}
+            onFocus={() => {
+              handleError(null, 'password')
+            }}
+          />
+
+          <Button borderRadius="30" mt="2" colorScheme="indigo" onPress={onSubmit}>
             Sign in
           </Button>
           <HStack mt="6" justifyContent="center">

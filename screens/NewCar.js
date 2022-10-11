@@ -6,7 +6,7 @@ import Connection from '../Connection';
 import { Alert, Image } from 'react-native';
 
 
-export default function NewCar({user_id, navigation }) {
+export default function NewCar({ user_id, navigation }) {
   const url = Connection().url;
   const [brand, setBrand] = useState('');
   const [reg_number, setReg_number] = useState('');
@@ -15,33 +15,51 @@ export default function NewCar({user_id, navigation }) {
   const [imageSource, setImageSource] = useState(null);
   const [userId, setUserId] = useState(user_id);
 
-  function selectImage() {
+  const selectImage = async () => {
     let options = {
       title: 'You can choose one image',
-      maxWidth: 256,
-      maxHeight: 256,
-      noData: true,
-      mediaType: 'photo',
-      storageOptions: {
-        skipBackup: true
-      }
+      type: 'libray',
+      options: {
+        maxWidth: 256,
+        maxHeight: 256,
+        selectionLimit: 1,
+        mediaType: 'photo',
+        includeBase64: false,
+      },
     };
 
-    launchImageLibrary(options, response => {
-      if (response.didCancel) {
-        console.log('User cancelled photo picker');
-        Alert.alert('You did not select any image');
-      } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
-      } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
-      } else {
-        //console.log(response);
-        let source = { uri: response.assets[0].uri };
+    const images = await launchImageLibrary(options);
+    console.log(images);
+    const formdata = new FormData()
+    formdata.append('file', {
+      uri: images.assets[0].uri,
+      type:images.assets[0].type,
+      name:images.assets[0].fileName,
+    })
 
-        setImageSource(source.uri);
-      }
-    });
+    // let res = await fetch(url+'car',{
+    //   method: 'POST',
+    //   headers:{
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    //   body: formdata,
+    // })
+    // let responseJson = await res.json();
+    // console.log(responseJson);
+    let source = { uri: images.assets[0].uri };
+    setImageSource(source.uri);
+    // launchImageLibrary(options, response => {
+    //   if (response.didCancel) {
+    //     console.log('User cancelled photo picker');
+    //     Alert.alert('You did not select any image');
+    //   } else if (response.error) {
+    //     console.log('ImagePicker Error: ', response.error);
+    //   } else if (response.customButton) {
+    //     console.log('User tapped custom button: ', response.customButton);
+    //   } else {
+    //console.log(response);
+    //   }
+    // });
   }
 
   const saveCar = async () => {
@@ -61,7 +79,7 @@ export default function NewCar({user_id, navigation }) {
           headers: {
             'Content-type': 'application/json; charset=UTF-8',
           },
-          body: JSON.stringify({type : "save", data })
+          body: JSON.stringify({ type: "save", data })
         })
           .then((response) => response.json())
           .then((responseJson) => {
@@ -84,39 +102,39 @@ export default function NewCar({user_id, navigation }) {
 
 
   return (
-    
-      <VStack m="3" alignItems="center" justifyContent="center" space="3" >
-        <Text mt="2" fontSize="2xl">Add New Car</Text>
-        <FormControl>
-          <FormControl.Label>Brand</FormControl.Label>
-          <Input borderRadius="30" value={brand} onChangeText={(e) => { setBrand(e) }} />
-        </FormControl>
-        <FormControl>
-          <FormControl.Label>Reg. No</FormControl.Label>
-          <Input borderRadius="30" value={reg_number} onChangeText={(e) => { setReg_number(e) }} />
-        </FormControl>
-        <FormControl>
-          <FormControl.Label>price</FormControl.Label>
-          <Input borderRadius="30" value={price} onChangeText={(e) => { setPrice(e) }} />
-        </FormControl>
-        <FormControl>
-          <FormControl.Label>Description</FormControl.Label>
-          <Input borderRadius="30" value={description} onChangeText={(e) => { setDescription(e) }} />
-        </FormControl>
-        <HStack alignItems="flex-start" space="3">
 
-          <Button onPress={selectImage} >Pick Image</Button>
-          {imageSource !== null &&
-            <Image
+    <VStack m="3" alignItems="center" justifyContent="center" space="3" >
+      <Text mt="2" fontSize="2xl">Add New Car</Text>
+      <FormControl>
+        <FormControl.Label>Brand</FormControl.Label>
+        <Input borderRadius="30" value={brand} onChangeText={(e) => { setBrand(e) }} />
+      </FormControl>
+      <FormControl>
+        <FormControl.Label>Reg. No</FormControl.Label>
+        <Input borderRadius="30" value={reg_number} onChangeText={(e) => { setReg_number(e) }} />
+      </FormControl>
+      <FormControl>
+        <FormControl.Label>price</FormControl.Label>
+        <Input borderRadius="30" value={price} onChangeText={(e) => { setPrice(e) }} />
+      </FormControl>
+      <FormControl>
+        <FormControl.Label>Description</FormControl.Label>
+        <Input borderRadius="30" value={description} onChangeText={(e) => { setDescription(e) }} />
+      </FormControl>
+      <HStack alignItems="flex-start" space="3">
+
+        <Button onPress={selectImage} >Pick Image</Button>
+        {imageSource !== null &&
+          <Image
             source={{ uri: imageSource }}
-            style={{ width: 100, height: 100,}}
+            style={{ width: 100, height: 100, }}
             resizeMode='contain'
-            />
-          }
-        </HStack>
-          <Button mt="2" w="90%" borderRadius="30" colorScheme="indigo" onPress={saveCar}> Save</Button>
+          />
+        }
+      </HStack>
+      <Button mt="2" w="90%" borderRadius="30" colorScheme="indigo" onPress={saveCar}> Save</Button>
 
-      </VStack>
- 
+    </VStack>
+
   )
 }
